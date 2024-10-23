@@ -9,12 +9,10 @@ const AddTodo = ({ setOpen, data }) => {
   const [priority, setPriority] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [id, setId] = useState(1)
 
   const dispatch = useDispatch();
 
   const handleAddTodo = () => {
-    setId(id + 1)
     setOpen(false);
     dispatch(addTodo({ id: getRandomUID(), title: title, priority: priority, description: description, status: false }))
     message.success('Todo Successfully Added');
@@ -22,7 +20,7 @@ const AddTodo = ({ setOpen, data }) => {
 
   const handleEdit = () => {
     setOpen(false);
-    dispatch(editTodo({ id: id, title: title, priority: priority, description: description }))
+    dispatch(editTodo({ id: data.id, title: title, priority: priority, description: description }))
     message.success('Todo Successfully Edited');
   }
 
@@ -39,7 +37,7 @@ const AddTodo = ({ setOpen, data }) => {
           <Input onChange={(e) => setTitle(e.target.value)} value={title} name="title" placeholder="Basic usage" />
         </div>
         <div>
-          <label>Title</label>
+          <label>Select Priority</label>
           <CustomSelect defaultValue={data?.priority || ''} setValue={setPriority} />
         </div>
         <div>

@@ -4,12 +4,13 @@ import CustomModal from "./Modal"
 import React, { useState } from "react"
 import AddTodo from "./AddTodo"
 import { useDispatch } from "react-redux"
-import { handleDeleteTodo } from "../redux/features/todoSlice"
+import { editTaskStatus, handleDeleteTodo } from "../redux/features/todoSlice"
 
 const TodoCard = ({ item }) => {
   const [open, setOpen] = useState(false);
   const [modalContent, setModalContent] = useState();
   const dispatch = useDispatch();
+
 
   const handleEdit = (data) => {
     setOpen(true);
@@ -20,10 +21,16 @@ const TodoCard = ({ item }) => {
     dispatch(handleDeleteTodo(item))
     message.success('Deleted todo successful');
   }
+
+  const toggleStatus = () => {
+    dispatch(editTaskStatus(item));
+    message.success('Status successfully updated.')
+  }
+  
   return (
     <div className="flex items-center bg-white px-2 py-2 rounded">
       <div className="flex items-center gap-2 flex-1">
-        <input className="w-3.5 h-3.5" type="checkbox" />
+        <input onChange={() => toggleStatus()} className="w-3.5 h-3.5" type="checkbox" />
         <span className="text-sm text-gray-800">{item?.title}</span>
       </div>
       <div className="flex items-center gap-1 flex-1">
@@ -31,7 +38,7 @@ const TodoCard = ({ item }) => {
         <span className="text-sm text-gray-800">{item?.priority}</span>
       </div>
 
-      <span className={`text-sm flex-1 ${!item?.status ? 'text-green-600' : 'text-red-500'}`}>{item.status ? 'Completed' : 'Pending'}</span>
+      <span className={`text-sm flex-1 ${item?.status ? 'text-green-600' : 'text-red-500'}`}>{item.status ? 'Completed' : 'Pending'}</span>
       <span className="text-sm text-gray-800 flex-1">{item.description}</span>
 
       <div className="flex items-center gap-3 ">

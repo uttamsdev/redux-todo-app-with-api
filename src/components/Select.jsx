@@ -6,8 +6,8 @@ const CustomSelect = ({ setValue, defaultValue }) => {
     };
     return (
         <Select
-            placeholder="Select Priority"
             defaultValue={defaultValue}
+            placeholder="Select Priority"
             style={{
                 width: '100%',
             }}

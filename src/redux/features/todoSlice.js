@@ -13,6 +13,7 @@ export const todoSlice = createSlice({
             return state.todos
         },
         editTodo: (state, action) => {
+            console.log('action', action.payload)
             const editData = state.todos?.find(item => item.id === action.payload.id);
             editData.title = action.payload.title,
                 editData.priority = action.payload.priority,
@@ -29,6 +30,12 @@ export const todoSlice = createSlice({
 
             // Update the state with the filtered todos
             state.todos = updatedTodo;
+        },
+
+        editTaskStatus: (state, action) => {
+            console.log('edit', action.payload)
+            const updateData = state.todos.find(item => item.id === action.payload.id);
+            updateData.status = !updateData.status
         }
 
 
@@ -36,5 +43,5 @@ export const todoSlice = createSlice({
 
 })
 
-export const { addTodo, getTodos, editTodo, handleDeleteTodo } = todoSlice.actions
+export const { addTodo, getTodos, editTodo, handleDeleteTodo, editTaskStatus } = todoSlice.actions
 export default todoSlice.reducer
