@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const todoSlice = createSlice({
     name: 'todos',
     initialState: {
-        todos: []
+        todos: [],
+        filteredTodos: null
     },
     reducers: {
         addTodo: (state, action) => {
@@ -36,12 +37,25 @@ export const todoSlice = createSlice({
             console.log('edit', action.payload)
             const updateData = state.todos.find(item => item.id === action.payload.id);
             updateData.status = !updateData.status
-        }
+        },
+
+        filterTask: (state, action) => {
+            console.log(action.payload);
+            if (action.payload) {
+                // Apply the filter
+                state.filteredTodos = state.todos.filter(item => item.priority === action.payload);
+            } else {
+                // Reset the filteredTodos if no filter is provided
+                state.filteredTodos = null;
+            }
+
+            console.log(state.filteredTodos)
+        },
 
 
     },
 
 })
 
-export const { addTodo, getTodos, editTodo, handleDeleteTodo, editTaskStatus } = todoSlice.actions
+export const { addTodo, getTodos, editTodo, handleDeleteTodo, editTaskStatus, filterTask } = todoSlice.actions
 export default todoSlice.reducer

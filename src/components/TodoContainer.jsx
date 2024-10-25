@@ -5,17 +5,23 @@ import TodoCard from "./TodoCard";
 import React, { useState } from "react";
 import CustomModal from "./Modal";
 import AddTodo from "./AddTodo";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { filterTask } from "../redux/features/todoSlice";
 
 
 const TodoContainer = () => {
   const [open, setOpen] = useState(false);
   const todos = useSelector((state) => state.todo.todos);
+  const filteredTodos = useSelector((state) => state.todo.filteredTodos);
+
+  console.log('filter', filteredTodos)
+  const tasksToDisplay = filteredTodos || todos;
+
+  const dispatch = useDispatch();
 
   console.log('todo', todos)
   const handleMenuClick = (e) => {
-    // message.info('Click on menu item.');
-    console.log('click', e);
+    dispatch(filterTask(e.key == 1 ? 'high' : e.key == 2 ? 'medium' : 'low'))
   };
 
   const menuProps = {
@@ -33,7 +39,7 @@ const TodoContainer = () => {
           <Dropdown menu={menuProps}>
             <Button>
               <Space>
-                Button
+                Filter
                 <DownOutlined />
               </Space>
             </Button>
@@ -41,7 +47,7 @@ const TodoContainer = () => {
         </div>
         <div className=" bg-stone-100 min-h-[400px] rounded px-6 py-4 space-y-3">
           {
-            todos?.map((item, i) => <TodoCard  item={item} key={i} />)
+            tasksToDisplay?.map((item, i) => <TodoCard item={item} key={i} />)
           }
         </div>
       </div>

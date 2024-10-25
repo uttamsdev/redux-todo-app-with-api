@@ -4,6 +4,7 @@ import CustomSelect from "./Select";
 import { useDispatch } from "react-redux";
 import { addTodo, editTodo } from "../redux/features/todoSlice";
 import { getRandomUID } from "../lib/getRandomId";
+import TextArea from "antd/es/input/TextArea";
 
 const AddTodo = ({ setOpen, data }) => {
   const [priority, setPriority] = useState('');
@@ -34,7 +35,7 @@ const AddTodo = ({ setOpen, data }) => {
       <div className="flex flex-col gap-2">
         <div>
           <label>Title</label>
-          <Input onChange={(e) => setTitle(e.target.value)} value={title} name="title" placeholder="Basic usage" />
+          <Input onChange={(e) => setTitle(e.target.value)} value={title} name="title" placeholder="Title" />
         </div>
         <div>
           <label>Select Priority</label>
@@ -42,7 +43,16 @@ const AddTodo = ({ setOpen, data }) => {
         </div>
         <div>
           <label>Description</label>
-          <Input onChange={(e) => setDescription(e.target.value)} name="Description" value={description} placeholder="Basic usage" />
+          <TextArea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description"
+            autoSize={{
+              minRows: 3,
+              maxRows: 5,
+            }}
+          />
+
         </div>
       </div>
       <div className="flex items-center justify-end gap-2 mt-4">
