@@ -8,13 +8,11 @@ import { editTaskStatus, handleDeleteTodo } from "../redux/features/todoSlice"
 import { useDeleteTodoMutation } from "../redux/query/todoQuery"
 
 const TodoCard = ({ item }) => {
-  const [deleteTodo, { data, isLoading, isSuccess, isError }] = useDeleteTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
   const [open, setOpen] = useState(false);
   const [modalContent, setModalContent] = useState();
   const dispatch = useDispatch();
 
-
-  console.log('data', data)
   const handleEdit = (data) => {
     setOpen(true);
     setModalContent(React.cloneElement(<AddTodo setOpen={setOpen} data={data} />, { key: new Date().getTime() }))

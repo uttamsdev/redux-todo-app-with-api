@@ -15,8 +15,6 @@ const AddTodo = ({ setOpen, data }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const dispatch = useDispatch();
-
   const handleAddTodo = async () => {
     setOpen(false);
     const postData = {
@@ -25,8 +23,9 @@ const AddTodo = ({ setOpen, data }) => {
       description: description,
       isCompleted: false,
     }
-    await addTodo(postData)
-    if (isSuccess) {
+    const response = await addTodo(postData).unwrap();
+    console.log(response?.insertedId)
+    if (response) {
       message.success('Todo Successfully Added');
     }
     if (isError) {
@@ -43,11 +42,14 @@ const AddTodo = ({ setOpen, data }) => {
       description: description,
     }
     try {
-      await editTodo({ id: item?._id, data: postData });
+      const result = await editTodo({ id: item?._id, data: postData }).unwrap();
+      console.log('result', result)
+      if (result?.modifiedCount) {
+        message.success('Todo Successfully Edited');
+      }
     } catch (error) {
       message.error('Error updating todo:', error);
     }
-    message.success('Todo Successfully Edited');
   }
 
   useEffect(() => {
