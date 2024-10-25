@@ -38,7 +38,7 @@ const TodoCard = ({ item }) => {
         <span className="text-sm text-gray-800">{item?.priority}</span>
       </div>
 
-      <span className={`text-sm flex-1 ${item?.status ? 'text-green-600' : 'text-red-500'}`}>{item.status ? 'Completed' : 'Pending'}</span>
+      <span className={`text-sm flex-1 ${item?.isCompleted ? 'text-green-600' : 'text-red-500'}`}>{item.isCompleted ? 'Completed' : 'Pending'}</span>
       <span className="text-sm text-gray-800 flex-1">{item.description}</span>
 
       <div className="flex items-center gap-3 ">

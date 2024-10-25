@@ -5,18 +5,31 @@ import { useDispatch } from "react-redux";
 import { addTodo, editTodo } from "../redux/features/todoSlice";
 import { getRandomUID } from "../lib/getRandomId";
 import TextArea from "antd/es/input/TextArea";
+import { useAddTodoMutation } from "../redux/query/todoQuery";
 
 const AddTodo = ({ setOpen, data }) => {
+  const [addTodo, { data: resData, isLoading, isError, isSuccess }] = useAddTodoMutation();
   const [priority, setPriority] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const dispatch = useDispatch();
 
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     setOpen(false);
-    dispatch(addTodo({ id: getRandomUID(), title: title, priority: priority, description: description, status: false }))
-    message.success('Todo Successfully Added');
+    const postData = {
+      title: title,
+      priority: priority,
+      description: description,
+      isCompleted: false,
+    }
+    await addTodo(postData)
+    if (isSuccess) {
+      message.success('Todo Successfully Added');
+    }
+    if (isError) {
+      message.error('Failed to add');
+    }
   }
 
   const handleEdit = () => {

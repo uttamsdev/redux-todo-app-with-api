@@ -1,4 +1,4 @@
-import { Button, Dropdown, Space } from "antd"
+import { Button, Dropdown, Skeleton, Space } from "antd"
 import { items } from "../lib/filterItems";
 import { DownOutlined } from "@ant-design/icons";
 import TodoCard from "./TodoCard";
@@ -7,15 +7,17 @@ import CustomModal from "./Modal";
 import AddTodo from "./AddTodo";
 import { useDispatch, useSelector } from "react-redux";
 import { clearFilter, filterTask } from "../redux/features/todoSlice";
+import { useGetTodosQuery } from "../redux/query/todoQuery";
 
 
 const TodoContainer = () => {
   const [open, setOpen] = useState(false);
-  const todos = useSelector((state) => state.todo.todos);
-  const filteredTodos = useSelector((state) => state.todo.filteredTodos);
+  const { data: todos, isLoading, isError, refetch } = useGetTodosQuery()
+  // const todos = useSelector((state) => state.todo.todos);
+  // const filteredTodos = useSelector((state) => state.todo.filteredTodos);
 
-  console.log('filter', filteredTodos)
-  const tasksToDisplay = filteredTodos || todos;
+  // console.log('filter', filteredTodos)
+  // const tasksToDisplay = filteredTodos || todos;
 
   const dispatch = useDispatch();
 
@@ -50,11 +52,15 @@ const TodoContainer = () => {
             </Button>
           </div>
         </div>
-        <div className=" bg-stone-100 min-h-[400px] rounded px-6 py-4 space-y-3">
-          {
-            tasksToDisplay?.map((item, i) => <TodoCard item={item} key={i} />)
-          }
-        </div>
+        {
+          isLoading ? <Skeleton active /> :
+            isError ? 'something went wrong' :
+              todos?.data?.length > 0 ? <div className=" bg-stone-100 min-h-[400px] rounded px-6 py-4 space-y-3">
+                {
+                  todos?.data?.map((item, i) => <TodoCard item={item} key={i} />)
+                }
+              </div> : ''
+        }
       </div>
       <CustomModal
         setOpen={setOpen}
