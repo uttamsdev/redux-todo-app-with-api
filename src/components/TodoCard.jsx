@@ -5,28 +5,34 @@ import React, { useState } from "react"
 import AddTodo from "./AddTodo"
 import { useDispatch } from "react-redux"
 import { editTaskStatus, handleDeleteTodo } from "../redux/features/todoSlice"
+import { useDeleteTodoMutation } from "../redux/query/todoQuery"
 
 const TodoCard = ({ item }) => {
+  const [deleteTodo, { data, isLoading, isSuccess, isError }] = useDeleteTodoMutation();
   const [open, setOpen] = useState(false);
   const [modalContent, setModalContent] = useState();
   const dispatch = useDispatch();
 
 
+  console.log('data', data)
   const handleEdit = (data) => {
     setOpen(true);
     setModalContent(React.cloneElement(<AddTodo setOpen={setOpen} data={data} />, { key: new Date().getTime() }))
   }
 
-  const handleDelete = (item) => {
-    dispatch(handleDeleteTodo(item))
+  const handleDelete = async (item) => {
+    console.log(item)
+    await deleteTodo(item?._id)
     message.success('Deleted todo successful');
+
+
   }
 
   const toggleStatus = () => {
     dispatch(editTaskStatus(item));
     message.success('Status successfully updated.')
   }
-  
+
   return (
     <div className="flex items-center bg-white px-2 py-2 rounded">
       <div className="flex items-center gap-2 flex-1">

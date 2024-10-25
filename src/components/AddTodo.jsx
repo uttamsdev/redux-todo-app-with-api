@@ -5,10 +5,12 @@ import { useDispatch } from "react-redux";
 import { addTodo, editTodo } from "../redux/features/todoSlice";
 import { getRandomUID } from "../lib/getRandomId";
 import TextArea from "antd/es/input/TextArea";
-import { useAddTodoMutation } from "../redux/query/todoQuery";
+import { useAddTodoMutation, useEditTodoMutation } from "../redux/query/todoQuery";
+import { items } from "../lib/filterItems";
 
 const AddTodo = ({ setOpen, data }) => {
   const [addTodo, { data: resData, isLoading, isError, isSuccess }] = useAddTodoMutation();
+  const [editTodo] = useEditTodoMutation();
   const [priority, setPriority] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -32,9 +34,19 @@ const AddTodo = ({ setOpen, data }) => {
     }
   }
 
-  const handleEdit = () => {
+  const handleEdit = async (item) => {
+    console.log('first', item)
     setOpen(false);
-    dispatch(editTodo({ id: data.id, title: title, priority: priority, description: description }))
+    const postData = {
+      title: title,
+      priority: priority,
+      description: description,
+    }
+    try {
+      await editTodo({ id: item?._id, data: postData });
+    } catch (error) {
+      message.error('Error updating todo:', error);
+    }
     message.success('Todo Successfully Edited');
   }
 
@@ -70,7 +82,7 @@ const AddTodo = ({ setOpen, data }) => {
       </div>
       <div className="flex items-center justify-end gap-2 mt-4">
         <Button onClick={() => setOpen(false)} variant="outlined" color="default">Cancel</Button>
-        <Button type="primary" color="" onClick={data ? handleEdit : handleAddTodo}>{data ? 'Update' : 'Add'}</Button>
+        <Button type="primary" color="" onClick={data ? () => handleEdit(data) : handleAddTodo}>{data ? 'Update' : 'Add'}</Button>
       </div>
     </div>
   )

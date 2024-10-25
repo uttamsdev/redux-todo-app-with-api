@@ -12,7 +12,8 @@ import { useGetTodosQuery } from "../redux/query/todoQuery";
 
 const TodoContainer = () => {
   const [open, setOpen] = useState(false);
-  const { data: todos, isLoading, isError, refetch } = useGetTodosQuery()
+  const [filter, setFilter] = useState(null)
+  const { data: todos, isLoading, isError, refetch } = useGetTodosQuery(filter ? filter : null)
   // const todos = useSelector((state) => state.todo.todos);
   // const filteredTodos = useSelector((state) => state.todo.filteredTodos);
 
@@ -21,15 +22,19 @@ const TodoContainer = () => {
 
   const dispatch = useDispatch();
 
-  console.log('todo', todos)
+  // console.log('todo', todos)
   const handleMenuClick = (e) => {
-    dispatch(filterTask(e.key == 1 ? 'high' : e.key == 2 ? 'medium' : 'low'))
+    setFilter(e.key == 1 ? 'high' : e.key == 2 ? 'medium' : 'low')
   };
 
   const menuProps = {
     items,
     onClick: handleMenuClick,
   };
+
+  const handleClearFilter = () => {
+    setFilter('')
+  }
   return (
     <div>
       <h1 className="mt-10 mb-4 text-xl font-bold text-center">Todo Application With Redux</h1>
@@ -47,7 +52,7 @@ const TodoContainer = () => {
                 </Space>
               </Button>
             </Dropdown>
-            <Button color="danger" variant="solid" onClick={() => dispatch(clearFilter())}>
+            <Button color="danger" variant="solid" onClick={handleClearFilter}>
               Clear filter
             </Button>
           </div>
