@@ -52,10 +52,14 @@ export const todoSlice = createSlice({
             console.log(state.filteredTodos)
         },
 
+        clearFilter: (state) => {
+            state.filteredTodos = null
+        }
+
 
     },
 
 })
 
-export const { addTodo, getTodos, editTodo, handleDeleteTodo, editTaskStatus, filterTask } = todoSlice.actions
+export const { addTodo, getTodos, editTodo, handleDeleteTodo, editTaskStatus, filterTask, clearFilter} = todoSlice.actions
 export default todoSlice.reducer

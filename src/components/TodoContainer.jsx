@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import CustomModal from "./Modal";
 import AddTodo from "./AddTodo";
 import { useDispatch, useSelector } from "react-redux";
-import { filterTask } from "../redux/features/todoSlice";
+import { clearFilter, filterTask } from "../redux/features/todoSlice";
 
 
 const TodoContainer = () => {
@@ -36,14 +36,19 @@ const TodoContainer = () => {
           <Button color="default" variant="solid" onClick={() => setOpen(true)}>
             Add Todo
           </Button>
-          <Dropdown menu={menuProps}>
-            <Button>
-              <Space>
-                Filter
-                <DownOutlined />
-              </Space>
+          <div className="flex items-center gap-2">
+            <Dropdown menu={menuProps}>
+              <Button>
+                <Space>
+                  Filter
+                  <DownOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
+            <Button color="danger" variant="solid" onClick={() => dispatch(clearFilter())}>
+              Clear filter
             </Button>
-          </Dropdown>
+          </div>
         </div>
         <div className=" bg-stone-100 min-h-[400px] rounded px-6 py-4 space-y-3">
           {
